@@ -1,0 +1,29 @@
+#cloud-config
+package_upgrade: true
+packages:
+  - nginx
+  - openjdk-11-jdk
+  - tomcat9
+  - unzip
+runcmd:
+  - |
+    cat << 'NGINX_EOF' > /etc/nginx/sites-available/default
+    server {
+        listen 80;
+        server_name _;
+        location / {
+            proxy_pass http://127.0.0.1:8080;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+        }
+    }
+    NGINX_EOF
+  - systemctl restart nginx
+  - wget https://nexus.magnolia-cms.com/repository/public/info/magnolia/bundle/magnolia-community-webapp/6.2.32/magnolia-community-webapp-6.2.32-tomcat-bundle.zip -O /tmp/magnolia.zip
+  - unzip /tmp/magnolia.zip -d /opt/
+  - mv /opt/magnolia-community-webapp-* /opt/magnolia
+  - cp -r /opt/magnolia/webapps/magnoliaAuthor /var/lib/tomcat9/webapps/ROOT
+  - chown -R tomcat:tomcat /var/lib/tomcat9/webapps/ROOT
+  - systemctl restart tomcat9
