@@ -21,5 +21,5 @@ provider "azurerm" {
 
 resource "azurerm_resource_group" "rg" {
   name     = "crescendo-exam-rg"
-  location = "Southeast Asia"
+  location = "East US"
 }
