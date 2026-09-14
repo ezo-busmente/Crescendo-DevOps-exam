@@ -19,7 +19,7 @@ resource "azurerm_linux_virtual_machine" "app_vm" {
   name                = "crescendo-app-vm"
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_resource_group.rg.location
-  size                = "Standard_B1ms"
+  size                = "Standard_D2s_v7"
   admin_username      = "adminuser"
   network_interface_ids = [
     azurerm_network_interface.vm_nic.id,
