@@ -10,6 +10,11 @@ resource "azurerm_network_interface" "vm_nic" {
   }
 }
 
+resource "tls_private_key" "vm_ssh" {
+  algorithm = "RSA"
+  rsa_bits  = 4096
+}
+
 resource "azurerm_linux_virtual_machine" "app_vm" {
   name                = "crescendo-app-vm"
   resource_group_name = azurerm_resource_group.rg.name
@@ -22,7 +27,7 @@ resource "azurerm_linux_virtual_machine" "app_vm" {
 
   admin_ssh_key {
     username   = "adminuser"
-    public_key = file("~/.ssh/id_rsa.pub") 
+    public_key = tls_private_key.vm_ssh.public_key_openssh
   }
 
   os_disk {

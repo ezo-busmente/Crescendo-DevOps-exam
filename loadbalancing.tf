@@ -110,15 +110,16 @@ resource "azurerm_cdn_frontdoor_origin_group" "fd_origin_group" {
 }
 
 resource "azurerm_cdn_frontdoor_origin" "fd_origin" {
-  name                          = "appgw-origin"
-  cdn_frontdoor_origin_group_id = azurerm_cdn_frontdoor_origin_group.fd_origin_group.id
-  enabled                       = true
-  host_name                     = azurerm_public_ip.appgw_ip.ip_address
-  http_port                     = 80
-  https_port                    = 443
-  origin_host_header            = azurerm_public_ip.appgw_ip.ip_address
-  priority                      = 1
-  weight                        = 1000
+  name                           = "appgw-origin"
+  cdn_frontdoor_origin_group_id  = azurerm_cdn_frontdoor_origin_group.fd_origin_group.id
+  enabled                        = true
+  host_name                      = azurerm_public_ip.appgw_ip.ip_address
+  http_port                      = 80
+  https_port                     = 443
+  origin_host_header             = azurerm_public_ip.appgw_ip.ip_address
+  priority                       = 1
+  weight                         = 1000
+  certificate_name_check_enabled = false
 }
 
 resource "azurerm_cdn_frontdoor_route" "fd_route" {
